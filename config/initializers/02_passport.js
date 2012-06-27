@@ -2,8 +2,8 @@ var passport = require('passport'), TwitterStrategy = require('passport-twitter'
 var Authentication = require('../../app/models/authentication').Authentication, User = require('../../app/models/user').User;
 
 passport.use(new TwitterStrategy({
-    consumerKey: "VEO0QbGXgRsV2J2gYXyYg",
-    consumerSecret: "OBNOnCU8frPi8svJcyAlEiwkYwCbQlQDhAjGswE0k",
+    consumerKey: process.env.TWITTER_KEY,
+    consumerSecret: process.env.TWITTER_SECRET,
     callbackURL: "http://localhost:3000/auth/twitter/callback"
   }, function(token, tokenSecret, profile, done) {
       Authentication.findOne({ provider: profile.provider, uid: profile.id }, function(err, authentication) {
