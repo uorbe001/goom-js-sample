@@ -1,0 +1,28 @@
+<vertex>
+#ifdef GL_ES 
+precision highp float; 
+#endif 
+
+const float cOne = 1.0; 
+const float cCero = 0.0; 
+
+attribute vec3 aPosition; 
+uniform mat4 uProjectionMatrix;
+uniform mat4 uViewMatrix;
+uniform mat4 uModelMatrix; 
+
+void main(void) {
+    mat4 MVMatrix = uViewMatrix * uModelMatrix;
+    vec4 position = MVMatrix * vec4(aPosition, cOne);
+    gl_Position = uProjectionMatrix * position;
+}
+</vertex>
+<fragment>
+#ifdef GL_ES 
+precision highp float;
+#endif
+
+void main(void) {
+    gl_FragColor = vec4(0, 1, 0, 1);
+}
+</fragment>

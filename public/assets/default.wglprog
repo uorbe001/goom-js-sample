@@ -1,0 +1,35 @@
+<vertex>
+#ifdef GL_ES 
+precision highp float; 
+#endif 
+
+const float cOne = 1.0; 
+const float cCero = 0.0; 
+
+attribute vec3 aPosition; 
+attribute vec2 aTextureCoordinate;
+attribute vec3 aNormal;
+uniform mat4 uProjectionMatrix;
+uniform mat4 uViewMatrix;
+uniform mat4 uModelMatrix; 
+varying vec2 vTextureCoordinate; 
+
+void main(void) {
+    mat4 MVMatrix = uViewMatrix * uModelMatrix;
+    vec4 position = MVMatrix * vec4(aPosition, cOne);
+    gl_Position = uProjectionMatrix * position;
+    vTextureCoordinate = aTextureCoordinate;
+}
+</vertex>
+<fragment>
+#ifdef GL_ES 
+precision highp float;
+#endif
+
+uniform sampler2D uTexture0;
+varying vec2 vTextureCoordinate;
+
+void main(void) {
+    gl_FragColor = texture2D(uTexture0, vTextureCoordinate);
+}
+</fragment>

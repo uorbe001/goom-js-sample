@@ -1,0 +1,16 @@
+{
+  "name": "box",
+  "modelVersion": 1,
+  "meshes": [
+    {
+      "defaultTexture": "/assets/crate.png",
+      "submeshes": [
+        {
+          "indexOffset": 0,
+          "indexCount": 36
+        }
+      ],
+      "material": ""
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "goom-web",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "locomotive": ">= 0.1.0",
+    "locomotive-mongoose": ">= 0.1.0",
+    "express": ">= 2.4.7",
+    "jade": ">= 0.26.0",
+    "mongoose": ">= 2.6.4",
+    "mongoose-types": ">= 1.0.3",
+    "passport":  ">= 0.1.8",
+    "passport-twitter": ">= 0.1.3"
+  }
+}
