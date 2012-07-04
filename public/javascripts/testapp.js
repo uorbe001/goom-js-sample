@@ -12,7 +12,7 @@ require(["/javascripts/domReady.js!", "/javascripts/game-shim.js", "/javascripts
 	var gameserver_socket = io.connect(connection);
 	var gameClient, last = new Date();
 
-	gameClient = new Client({"canvas_holder_id": "goom", "width": "500", "height": "500" },
+	gameClient = new Client({"canvas_holder_id": "goom", "width": "860", "height": "480" },
 		function(event) { gameserver_socket.emit("event", event); });
 
 	gameClient.setDrawCallback(function(now) {

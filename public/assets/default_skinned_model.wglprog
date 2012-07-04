@@ -1,0 +1,72 @@
+<vertex>
+#ifdef GL_ES 
+precision highp float; 
+#endif 
+
+attribute vec3 aPosition;
+attribute vec2 aTextureCoordinate;
+attribute vec3 aNormal;
+attribute vec3 aWeights;
+attribute vec3 aBones;
+
+uniform mat4 uViewMatrix;
+uniform mat4 uModelMatrix;
+uniform mat4 uProjectionMatrix;
+uniform mat4 uBoneMat[50];
+
+varying vec2 vTextureCoordinate;
+varying vec3 vNormal;
+varying vec3 vEyeDir;
+
+mat4 accumulateSkinMat() {
+   mat4 result = aWeights.x * uBoneMat[int(aBones.x)];
+   result = result + aWeights.y * uBoneMat[int(aBones.y)];
+   result = result + aWeights.z * uBoneMat[int(aBones.z)];
+   return result;
+}
+
+mat3 getNormalMat(mat4 mat) {
+   return mat3(mat[0][0], mat[1][0], mat[2][0], mat[0][1], mat[1][1], mat[2][1], mat[0][2], mat[1][2], mat[2][2]);
+}
+
+void main(void) {
+   mat4 modelViewMat = uViewMatrix * uModelMatrix;
+   mat4 skinMat = modelViewMat * accumulateSkinMat();
+   mat3 normalMat = getNormalMat(skinMat);
+
+   vec4 vPosition = skinMat * vec4(aPosition, 1.0);
+   gl_Position = uProjectionMatrix * vPosition;
+
+   vTextureCoordinate = aTextureCoordinate;
+   vNormal = normalize(aNormal * normalMat);
+   vEyeDir = normalize(-vPosition.xyz);
+}
+</vertex>
+<fragment>
+#ifdef GL_ES 
+precision highp float;
+#endif
+
+uniform sampler2D uTexture0;
+varying vec2 vTextureCoordinate;
+varying vec3 vNormal;
+varying vec3 vEyeDir;
+
+void main(void) {
+	float shininess = 8.0;
+	vec3 specularColor = vec3(1.0, 1.0, 1.0);
+	vec3 lightColor = vec3(1.0, 1.0, 1.0);
+	vec3 ambientLight = vec3(0.15, 0.15, 0.15);
+	vec4 color = texture2D(uTexture0, vTextureCoordinate);
+	vec3 normal = normalize(vNormal);
+	vec3 lightDir = normalize(vec3(5.0, 3.0, 0.0));
+	vec3 eyeDir = normalize(vEyeDir);
+	vec3 reflectDir = reflect(-lightDir, normal);
+
+	float specularLevel = color.a;
+	float specularFactor = pow(clamp(dot(reflectDir, eyeDir), 0.0, 1.0), shininess) * specularLevel;
+	float lightFactor = max(dot(lightDir, normal), 0.0);
+	vec3 lightValue = ambientLight + (lightColor * lightFactor) + (specularColor * specularFactor);
+	gl_FragColor = vec4(color.rgb * lightValue, 1.0);
+}
+</fragment>

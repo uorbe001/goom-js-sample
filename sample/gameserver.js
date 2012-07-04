@@ -13,7 +13,8 @@ var a1 = function() { return Responses.SUCCESS; };
 var config = {
 	"render_models": {
 		"box": "/assets/box.wglmodel",
-		"robot_arm": "/assets/robot_arm.wglmodel"
+		"robot_arm": "/assets/robot_arm.wglmodel",
+		"soldier": "/assets/soldier.skinned.wglmodel"
 	},
 
 	"agent_models": [
@@ -68,8 +69,9 @@ var config = {
 		"cameras": [
 			{
 				"id": "camera0",
-				"position": {"x": 0, "y": 0, "z": -125},
+				"position": {"x": 0, "y": -1, "z": -4},
 				"target": {"x": 0, "y": 0, "z": 0},
+				"view_angle": 45,
 				"active": true
 			}
 		],
@@ -140,7 +142,7 @@ io.set('authorization', function (handshake, accept) {
 
 
 //Annoying log...
-//io.set('log level', 0);
+io.set('log level', 0);
 
 //Game socket.io
 io.sockets.on('connection', function (socket) {
@@ -164,48 +166,41 @@ gameServer = new GoomServer(config, broadcast, sendTo);
 
 gameServer.on("left", function(player) {
 	player.velocity.x = -player.model.movement.velocity;
-	player.isDirty = true;
 	player.body.isAwake = true;
 });
 
 gameServer.on("right", function(player) {
 	player.velocity.x = player.model.movement.velocity;
-	player.isDirty = true;
 	player.body.isAwake = true;
 });
 
 gameServer.on("up", function(player) {
 	player.velocity.z = player.model.movement.velocity;
-	player.isDirty = true;
 	player.body.isAwake = true;
+	player.playAnimation("/assets/run");
 });
 
 gameServer.on("down", function(player) {
 	player.velocity.z = -player.model.movement.velocity;
-	player.isDirty = true;
 	player.body.isAwake = true;
 });
 
 gameServer.on("left_up", function(player) {
 	player.velocity.x = 0;
-	player.isDirty = true;
 	player.body.isAwake = true;
 });
 
 gameServer.on("right_up", function(player) {
 	player.velocity.x = 0;
-	player.isDirty = true;
 	player.body.isAwake = true;
 });
 
 gameServer.on("up_up", function(player) {
 	player.velocity.z = 0;
-	player.isDirty = true;
 	player.body.isAwake = true;
 });
 
 gameServer.on("down_up", function(player) {
 	player.velocity.z = 0;
-	player.isDirty = true;
 	player.body.isAwake = true;
 });
